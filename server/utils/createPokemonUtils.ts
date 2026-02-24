@@ -10,8 +10,9 @@ export async function throwIfUserExist(name:string) {
     }
 }
 
-export async function createPokemon(name:string, type:string, generation:number){
+export async function createPokemon(name:string, type:string, generation:number, userId:number){
     const res = await useDb().insert(schema.pokemons).values({
+        userId,
         name, 
         type, 
         generation
