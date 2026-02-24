@@ -7,3 +7,11 @@ export const users = sqliteTable("users", {
   login: text("login"),
   password: text("password"),
 });
+
+export const pokemons = sqliteTable("pokemons", {
+  id: integer("id").primaryKey(),
+  name: text("name"),
+  type: text("type"),
+  generation: integer("generation"),
+  userId: integer("userId").notNull().references(()=> users.id, { onDelete: "cascade"}),
+});
