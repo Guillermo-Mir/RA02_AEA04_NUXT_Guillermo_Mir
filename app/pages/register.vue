@@ -23,25 +23,25 @@ const state = reactive<Partial<Schema>>({
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     console.log(event.data)
-    try{
+    try {
         await $fetch('/auth/register', { //vincular
-            method:'POST', 
+            method: 'POST',
             body: event.data //informacio del formulari
         })
-         toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
-         fetch()   
-        } catch (error){
-        if(error instanceof FetchError){
-          // error controlat de fetch
-            toast.add({ title: 'Error', description: error.data.message, color: 'error' })  
-        }else{
-          //error no controlat  
-        } toast.add({ title: 'Error', description:"Error en l'aplicació", color: 'error' })  
+        toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
+        fetch()
+    } catch (error) {
+        if (error instanceof FetchError) {
+            // error controlat de fetch
+            toast.add({ title: 'Error', description: error.data.message, color: 'error' })
+        } else {
+            //error no controlat  
+        } toast.add({ title: 'Error', description: "Error en l'aplicació", color: 'error' })
     }
 }
 
-watch(loggedIn, ()=>{
-    if(loggedIn.value){
+watch(loggedIn, () => {
+    if (loggedIn.value) {
         navigateTo('/admin')
     }
 })
@@ -51,28 +51,34 @@ watch(loggedIn, ()=>{
 
 <template>
     <UCard class="max-w-md m-auto my-10 mt-4">
-        <template> <h1 class="text-2xl text-center"> REGISTER </h1> </template>
+        <template>
+            <h1 class="text-2xl text-center"> REGISTER </h1>
+        </template>
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            
-             <UFormField label="Name" name="name">
+
+            <UFormField label="Name" name="name">
                 <UInput v-model="state.name" class="w-full" />
             </UFormField>
 
-            
+
             <UFormField label="Email" name="email">
-                <UInput v-model="state.email"  class="w-full" />
+                <UInput v-model="state.email" class="w-full" />
             </UFormField>
 
             <UFormField label="Password" name="password">
-                <UInput v-model="state.password" type="password"  class="w-full" />
+                <UInput v-model="state.password" type="password" class="w-full" />
             </UFormField>
 
-            <UButton type="submit">
+            <UButton type="submit"
+                class="w-full bg-black hover:bg-gray-800 text-white font-semibold rounded-lg px-4 py-2">
                 Submit
             </UButton>
         </UForm>
-        <UButton type="submit" class="mt-4"  @click="openInPopup('/auth/github')">
-                Login With Github
+
+        <UButton type="button"
+            class="w-full mt-4 bg-black hover:bg-gray-800 text-white font-semibold rounded-lg px-4 py-2"
+            @click="openInPopup('/auth/github')">
+            Login With Github
         </UButton>
     </UCard>
 </template>

@@ -67,7 +67,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 <UInput v-model="state.generation" type="generation"  class="w-full" />
             </UFormField>
 
-            <UButton type="submit">
+            <UButton type="submit"
+                class="w-full bg-black hover:bg-gray-800 text-white font-semibold rounded-lg px-4 py-2">
                 Submit
             </UButton>
         </UForm>
