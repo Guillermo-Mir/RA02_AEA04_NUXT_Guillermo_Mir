@@ -11,6 +11,9 @@ const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession();
       <UButton as-child>
         <NuxtLink to="/login">Login</NuxtLink>
       </UButton>
+       <UButton as-child>
+        <NuxtLink to="/register">Registre</NuxtLink>
+      </UButton>
     </div>
   </UCard>
 </template>

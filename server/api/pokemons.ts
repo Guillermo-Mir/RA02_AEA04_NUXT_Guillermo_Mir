@@ -4,8 +4,8 @@ import { eq, and } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
-  const db = useDB()
-  const userId = session.user.id
+  const db = useDb()
+  const userId = Number(session.user.id)
 
 
 if (event.method === 'GET') {
@@ -43,7 +43,7 @@ if (event.method === 'GET') {
     const updated = await db
       .update(pokemons)
       .set(fields)
-      .where(and(eq(pokemons.id, id), eq(pokemons.userId, userId)))
+      .where(and(eq(pokemons.id, Number(id)), eq(pokemons.userId, userId)))
       .returning()
     if (!updated.length) throw createError({ statusCode: 404, message: 'No trobat o no autoritzat' })
     return updated[0]
@@ -52,9 +52,10 @@ if (event.method === 'GET') {
 
   if (event.method === 'DELETE') {
     const body = await readBody(event)
+    const query = getQuery(event)
     await db
       .delete(pokemons)
-      .where(and(eq(pokemons.id, body.id), eq(pokemons.userId, userId)))
+      .where(and(eq(pokemons.id, Number(body.id)), eq(pokemons.userId, userId)))
     return { success: true }
   }
 })

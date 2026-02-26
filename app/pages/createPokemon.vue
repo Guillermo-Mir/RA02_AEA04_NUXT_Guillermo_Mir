@@ -25,6 +25,7 @@ const state = reactive<Partial<Schema>>({
 })
 
 const toast = useToast()
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     console.log(event.data)
     try{
@@ -33,7 +34,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             body: event.data //informacio del formulari
         })
          toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
-         fetch()   
+
+         navigateTo('/pokemons')
+         
         } catch (error){
         if(error instanceof FetchError){
           // error controlat de fetch
