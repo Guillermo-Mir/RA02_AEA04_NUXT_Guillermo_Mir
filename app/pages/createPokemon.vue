@@ -11,9 +11,9 @@ const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession();
 
 
 const schema = z.object({
-    name: z.string(),
-    type: z.string(),
-    generation: z.string()
+  name: z.string().min(2, 'Mínim 2 caràcters'),
+  type: z.string().min(1, 'El tipus és obligatori'),
+  generation: z.coerce.number().min(1).max(9),
 })
 
 type Schema = z.output<typeof schema>
@@ -28,7 +28,7 @@ const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     console.log(event.data)
     try{
-        await $fetch('/createPokemon', { //vincular
+        await $fetch('/api/pokemons', { //vincular
             method:'POST', 
             body: event.data //informacio del formulari
         })
@@ -43,13 +43,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         } toast.add({ title: 'Error', description:"Error en l'aplicació", color: 'error' })  
     }
 }
-
-watch(loggedIn, ()=>{
-    if(loggedIn.value){
-        navigateTo('/admin')
-    }
-})
-
 
 </script>
 

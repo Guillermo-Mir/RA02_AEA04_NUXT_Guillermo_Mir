@@ -1,4 +1,6 @@
 import {eq} from "drizzle-orm"
+import { useDb } from "../utils" 
+import * as schema from "../db/schema" 
 
 export async function throwIfUserExist(name:string) {
     const existingPokemon = await useDb().query.pokemons.findFirst({
