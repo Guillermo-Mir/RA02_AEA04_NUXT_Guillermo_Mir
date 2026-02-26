@@ -10,7 +10,7 @@ const route = useRoute()
 const id = Number(route.query.id)
 
 // Cargar los datos del pokémon actual
-const { data: pokemon } = await useFetch(`/api/pokemons/${id}`)
+const { data: pokemon } = await useFetch(`/api/pokemons?id=${id}`)
 
 const schema = z.object({
   name: z.string().min(2, 'Mínim 2 caràcters'),
