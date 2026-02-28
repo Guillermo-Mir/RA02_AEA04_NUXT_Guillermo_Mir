@@ -45,6 +45,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
+  <UButton to="/admin" icon="i-heroicons-arrow-left" variant="ghost"
+    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200 px-3 py-2 -ml-3">
+    Tornar a l'Administració
+  </UButton>
   <UCard class="max-w-md m-auto my-10 mt-4">
     <template #header>
       <h1 class="text-2xl text-center">EDITAR POKEMON</h1>

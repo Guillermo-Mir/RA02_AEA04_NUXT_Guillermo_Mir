@@ -4,16 +4,16 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 import { FetchError } from 'ofetch'
 
 definePageMeta({
-  middleware: ["auth"],
+    middleware: ["auth"],
 });
 
 const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession();
 
 
 const schema = z.object({
-  name: z.string().min(2, 'Mínim 2 caràcters'),
-  type: z.string().min(1, 'El tipus és obligatori'),
-  generation: z.coerce.number().min(1).max(9),
+    name: z.string().min(2, 'Mínim 2 caràcters'),
+    type: z.string().min(1, 'El tipus és obligatori'),
+    generation: z.coerce.number().min(1).max(9),
 })
 
 type Schema = z.output<typeof schema>
@@ -28,43 +28,49 @@ const toast = useToast()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     console.log(event.data)
-    try{
+    try {
         await $fetch('/api/pokemons', { //vincular
-            method:'POST', 
+            method: 'POST',
             body: event.data //informacio del formulari
         })
-         toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
+        toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
 
-         navigateTo('/pokemons')
-         
-        } catch (error){
-        if(error instanceof FetchError){
-          // error controlat de fetch
-            toast.add({ title: 'Error', description: error.data.message, color: 'error' })  
-        }else{
-          //error no controlat  
-        } toast.add({ title: 'Error', description:"Error en l'aplicació", color: 'error' })  
+        navigateTo('/pokemons')
+
+    } catch (error) {
+        if (error instanceof FetchError) {
+            // error controlat de fetch
+            toast.add({ title: 'Error', description: error.data.message, color: 'error' })
+        } else {
+            //error no controlat  
+        } toast.add({ title: 'Error', description: "Error en l'aplicació", color: 'error' })
     }
 }
 
 </script>
 
 <template>
+    <UButton to="/admin" icon="i-heroicons-arrow-left" variant="ghost"
+        class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200 px-3 py-2 -ml-3">
+        Tornar a l'Administració
+    </UButton>
     <UCard class="max-w-md m-auto my-10 mt-4">
-        <template> <h1 class="text-2xl text-center"> CREATE POKEMON </h1> </template>
+        <template>
+            <h1 class="text-2xl text-center"> CREATE POKEMON </h1>
+        </template>
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            
-             <UFormField label="Name" name="name">
+
+            <UFormField label="Name" name="name">
                 <UInput v-model="state.name" class="w-full" />
             </UFormField>
 
-            
+
             <UFormField label="type" name="type">
-                <UInput v-model="state.type"  class="w-full" />
+                <UInput v-model="state.type" class="w-full" />
             </UFormField>
 
             <UFormField label="Generation" name="generation">
-                <UInput v-model="state.generation" type="generation"  class="w-full" />
+                <UInput v-model="state.generation" type="generation" class="w-full" />
             </UFormField>
 
             <UButton type="submit"

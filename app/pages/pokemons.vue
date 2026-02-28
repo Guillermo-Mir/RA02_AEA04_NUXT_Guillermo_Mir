@@ -10,69 +10,77 @@ async function deletePokemon(id: number) {
     method: 'DELETE',
     body: { id }
   })
-  toast.add({ title: 'Pokémon eliminat', color: 'error' })
+  toast.add({ title: 'Pokémon eliminat', color: 'red' })
   refresh()
 }
 </script>
+
 <template>
-  <div class="min-h-screen bg-white-50 py-10 px-4">
+  <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto">
 
-      <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-red-600 tracking-tight">
-          Els meus Pokémons
-        </h1>
+      <UButton to="/admin" icon="i-heroicons-arrow-left" variant="ghost"
+        class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200 px-3 py-2 -ml-3">
+        Tornar a l'Administració
+      </UButton>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+        <div>
+          <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+            Els meus Pokémons
+          </h1>
+          <p class="text-sm text-gray-500 mt-1">Gestiona el teu equip Pokémon</p>
+        </div>
 
         <UButton to="/createPokemon" icon="i-heroicons-plus"
-          class="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl shadow-md transition">
+          class="bg-gray-900 hover:bg-black text-white font-medium px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-200">
           Nou Pokémon
         </UButton>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <UCard v-for="pokemon in pokemons" :key="pokemon.id"
-          class="group relative overflow-hidden rounded-2xl border border-red-100 bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-          
-          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-400 to-red-600 opacity-80"></div>
+          class="group flex flex-col justify-between overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200">
 
-          <div class="flex flex-col gap-4">
-            <div class="text-left">
-              <h3 class="text-xl font-bold text-gray-800 group-hover:text-red-600 transition">
+          <div class="p-5 flex-1">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-lg font-bold text-gray-900 group-hover:text-black transition-colors">
                 {{ pokemon.name }}
               </h3>
-
-              <div class="flex flex-wrap gap-2 mt-1 text-sm">
-                <span class="px-3 py-1 rounded-full bg-red-50 text-red-600 font-medium">
-                  {{ pokemon.type }}
-                </span>
-
-                <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-600 font-medium">
-                  Gen {{ pokemon.generation }}
-                </span>
-              </div>
             </div>
 
-            <div class="flex gap-2">
-              <UButton
-                class="bg-white border border-red-200 text-red-500 hover:bg-red-50 rounded-lg shadow-sm"
-                :to="`/editPokemon?id=${pokemon.id}`">
-                Modifica
-              </UButton>
-
-              <UButton
-                icon="i-heroicons-trash"
-                class="bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-sm cursor-pointer"
-                @click="deletePokemon(pokemon.id)">
-              </UButton>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <span class="px-2.5 py-1 rounded-md bg-gray-900 text-white font-medium tracking-wide shadow-sm">
+                {{ pokemon.type }}
+              </span>
+              <span class="px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 font-medium border border-gray-200">
+                Gen {{ pokemon.generation }}
+              </span>
             </div>
           </div>
 
+          <div class="px-5 py-4 bg-gray-50 border-t border-gray-100 flex gap-3">
+            <UButton
+              class="flex-1 justify-center bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg shadow-sm transition-colors text-sm font-medium"
+              :to="`/editPokemon?id=${pokemon.id}`">
+              Modifica
+            </UButton>
+
+            <UButton icon="i-heroicons-trash"
+              class="bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 rounded-lg shadow-sm transition-colors cursor-pointer"
+              @click="deletePokemon(pokemon.id)">
+            </UButton>
+          </div>
         </UCard>
       </div>
 
-      <p v-if="!pokemons?.length" class="text-center text-red-300 mt-14 text-lg font-medium">
-        No tens cap Pokémon encara. Crea el primer!
-      </p>
+      <div v-if="!pokemons?.length"
+        class="text-center py-20 bg-white rounded-xl border border-gray-200 border-dashed mt-8">
+        <p class="text-gray-500 text-lg font-medium">
+          No tens cap Pokémon encara.
+        </p>
+        <p class="text-gray-400 text-sm mt-1 mb-6">Crea el teu primer Pokémon per començar el teu equip.</p>
+      </div>
+
     </div>
   </div>
 </template>
