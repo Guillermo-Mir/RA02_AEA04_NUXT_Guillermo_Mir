@@ -1,17 +1,15 @@
-import {eq} from "drizzle-orm"
+import { eq } from "drizzle-orm"
+import jwt from "jsonwebtoken" 
 
 export default defineEventHandler(async (event) => {
-    //1. Accedeixo als camps del formulari
+    const { email, password } = await readBody(event)
 
-    const {name,email,password} = await readBody(event)
-
-    //2 Comprovar que estiguin tots els camps
-     if(!email || !password){
+    if(!email || !password){
         throw createError({statusCode:400, statusMessage: "Falten camps per introduir"})
     }
 
     const existingUser = await useDb().query.users.findFirst({
-            where: eq(schema.users.email, email)
+        where: eq(schema.users.email, email)
     })
 
     if(!existingUser){
@@ -28,12 +26,25 @@ export default defineEventHandler(async (event) => {
         throw createError({statusCode: 400, statusMessage: "Incorrect password"})
     }
 
-    const {password: repassword, ...userWhithoutPassword} = existingUser
+    const {password: repassword, ...userWithoutPassword} = existingUser
 
     await setUserSession(event, {
-        user: userWhithoutPassword
+        user: userWithoutPassword
     })
 
-    return userWhithoutPassword
+    const secretKey = 'mi_clave_secreta_super_segura'; 
+    
+    const token = jwt.sign(
+        { 
+            id: existingUser.id,      
+            email: existingUser.email 
+        }, 
+        secretKey, 
+        { expiresIn: '7d' } 
+    );
 
+    return {
+        user: userWithoutPassword,
+        token: token 
+    }
 });
