@@ -1,8 +1,8 @@
 export default defineEventHandler((event) => {
-  // 1. Obtenemos de dónde viene la petición (ej. http://localhost:9000)
+  // 1. Obtenemos de dónde viene la petición
   const origin = getRequestHeader(event, 'origin');
   
-  // 2. Si hay un origen, le damos permiso exacto a ese origen
+  // 2. Si hay un origen, le damos permiso exacto a ese origen (¡esto soluciona lo de la IP!)
   if (origin) {
     setResponseHeaders(event, {
       'Access-Control-Allow-Origin': origin,
@@ -12,10 +12,10 @@ export default defineEventHandler((event) => {
     });
   }
 
-  // 3. Si es la petición fantasma (OPTIONS) del navegador, respondemos OK y cortamos aquí
+  // 3. Respuesta a la petición fantasma (OPTIONS)
   if (event.method === 'OPTIONS') {
     event.node.res.statusCode = 204;
     event.node.res.statusMessage = "No Content";
-    return send(event, ''); // Enviamos respuesta vacía pero exitosa
+    return send(event, ''); 
   }
 });
